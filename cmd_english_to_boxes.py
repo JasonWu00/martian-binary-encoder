@@ -22,6 +22,7 @@ that converts plaintext into spooky blackbox blocks and back.
 
 def encoder(user_input: str):
     #user_input = input("Enter a string to be black-box-ified: ")
+    #print(len(user_input))
     output = ""
 
     zero = '\u2591'
@@ -49,10 +50,12 @@ def encoder(user_input: str):
                 case '11':
                     output += three
     #print(output)
+    #print(len(output))
     return(output)
 
 def decoder(user_input: str):
     #user_input = input("Enter faux-binary string to be decoded: ")
+    #print(len(user_input))
     output = ""
     char_bin = ""
 
@@ -74,15 +77,31 @@ def decoder(user_input: str):
             output += chr(char_ascii)
             char_bin = ""
     #print(output)
+    #print(len(output))
     return(output)
+
+def debug(user_input: str):
+    print(len(user_input))
+    output = decoder(encoder(user_input))
+    print(len(output))
+    return(output)
+
+def debug2(user_input: str):
+    long_ass_mf = input("Long string here: ")
+    print(len(long_ass_mf))
+    print("END")
+    return("Debug ends")
 
 def main():
     choice = input("Encode or decode? ").lower()
     user_input = input("Your English or faux-binary here: ")
+    #print(f"Len of input is: {len(user_input)}")
     if choice == "encode":
         print(encoder(user_input))
     elif choice == "decode":
         print(decoder(user_input))
+    elif choice == "debug":
+        print(debug(user_input))
     else:
         print("Ineligible option.")
         
