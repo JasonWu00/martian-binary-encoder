@@ -21,6 +21,9 @@ that converts plaintext into spooky blackbox blocks and back.
 """
 
 def encoder(user_input: str):
+    """
+    The encoder takes in an English string and turns it into a mass of blackboxes.
+    """
     #user_input = input("Enter a string to be black-box-ified: ")
     #print(len(user_input))
     output = ""
@@ -51,9 +54,12 @@ def encoder(user_input: str):
                     output += three
     #print(output)
     #print(len(output))
-    return(output)
+    return output
 
 def decoder(user_input: str):
+    """
+    The decoder takes in a block of blackboxes and returns English text.
+    """
     #user_input = input("Enter faux-binary string to be decoded: ")
     #print(len(user_input))
     output = ""
@@ -78,21 +84,26 @@ def decoder(user_input: str):
             char_bin = ""
     #print(output)
     #print(len(output))
-    return(output)
+    return output
 
 def debug(user_input: str):
+    """debug function to check if decoder() truncated its input"""
     print(len(user_input))
     output = decoder(encoder(user_input))
     print(len(output))
-    return(output)
+    return output
 
-def debug2(user_input: str):
+def debug2():
+    """debug function 2"""
     long_ass_mf = input("Long string here: ")
     print(len(long_ass_mf))
     print("END")
-    return("Debug ends")
+    return "Debug ends"
 
 def main():
+    """
+    Main function
+    """
     choice = input("Encode or decode? ").lower()
     user_input = input("Your English or faux-binary here: ")
     #print(f"Len of input is: {len(user_input)}")
@@ -104,7 +115,7 @@ def main():
         print(debug(user_input))
     else:
         print("Ineligible option.")
-        
+
 
 if __name__ == "__main__":
     main()
