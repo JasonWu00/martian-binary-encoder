@@ -20,6 +20,9 @@ This Python file defines two functions, an encoder and a decoder,
 that converts plaintext into spooky blackbox blocks and back.
 """
 
+from pydub import AudioSegment
+from pydub.playback import play
+
 def encoder(user_input: str):
     """
     The encoder takes in an English string and turns it into a mass of blackboxes.
@@ -100,6 +103,36 @@ def debug2():
     print("END")
     return "Debug ends"
 
+def encode_audio(blackboxes: str, interval: float = 0.1):
+    """
+    Blackboxes to noise.
+
+    Interval of below 0.1 is finicky and liable to becoming incomprehensible.
+    """
+    zero = '\u2591'
+    one = '\u2592'
+    two = '\u2593'
+    three = '\u2588'
+    soundsfolder = "sounds/"
+    #background = AudioSegment.from_wav(soundsfolder+"742938__freekit__low-machine-hum.wav")
+    rumble0 = AudioSegment.from_mp3(soundsfolder+"rumble-2.mp3")[:1000*interval]
+    rumble1 = AudioSegment.from_mp3(soundsfolder+"rumble-15.mp3")[:1000*interval]
+    rumble2 = AudioSegment.from_mp3(soundsfolder+"rumble-1.mp3")[:1000*interval]
+    rumble3 = AudioSegment.from_mp3(soundsfolder+"rumble-05.mp3")[:1000*interval]
+    sounds_dict = {
+        zero: rumble0,
+        one: rumble1,
+        two: rumble2,
+        three: rumble3
+    }
+    output = None
+    for char in blackboxes:
+        if not output:
+            output = sounds_dict[char]
+        else:
+            output += sounds_dict[char]
+    play(output)
+
 def main():
     """
     Main function
@@ -107,14 +140,20 @@ def main():
     choice = input("Encode or decode? ").lower()
     user_input = input("Your English or faux-binary here: ")
     #print(f"Len of input is: {len(user_input)}")
+    output = None
     if choice == "encode":
-        print(encoder(user_input))
+        output = encoder(user_input)
+        print(output)
+        encode_audio(output)
     elif choice == "decode":
-        print(decoder(user_input))
+        output = decoder(user_input)
+        print(output)
     elif choice == "debug":
-        print(debug(user_input))
+        output = debug(user_input)
+        print(output)
     else:
         print("Ineligible option.")
+    #print(output)
 
 
 if __name__ == "__main__":

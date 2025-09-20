@@ -19,11 +19,13 @@ Copyright (C) 2024 Jason Wu
 This Python file defines two functions, an encoder and a decoder,
 that converts plaintext into spooky blackbox blocks and back.
 """
-
 import streamlit as st
 from st_copy_to_clipboard import st_copy_to_clipboard
 
 def encoder(user_input: str):
+    """
+    English to blackboxes.
+    """
     #user_input = input("Enter a string to be black-box-ified: ")
     output = ""
 
@@ -55,6 +57,9 @@ def encoder(user_input: str):
     return(output)
 
 def decoder(user_input: str):
+    """
+    Blackboxes to English.
+    """
     #user_input = input("Enter faux-binary string to be decoded: ")
     output = ""
     char_bin = ""
@@ -80,6 +85,9 @@ def decoder(user_input: str):
     return(output)
 
 def main():
+    """
+    Main.
+    """
 
     st.markdown(
         """
