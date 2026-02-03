@@ -103,7 +103,7 @@ def debug2():
     print("END")
     return "Debug ends"
 
-def encode_audio(blackboxes: str, interval: float = 0.1):
+def encode_audio(blackboxes: str, interval: float = 0.1, use_high_click: bool = True):
     """
     Blackboxes to noise.
 
@@ -115,15 +115,22 @@ def encode_audio(blackboxes: str, interval: float = 0.1):
     three = '\u2588'
     soundsfolder = "sounds/"
     #background = AudioSegment.from_wav(soundsfolder+"742938__freekit__low-machine-hum.wav")
-    rumble0 = AudioSegment.from_mp3(soundsfolder+"rumble-2.mp3")[:1000*interval]
-    rumble1 = AudioSegment.from_mp3(soundsfolder+"rumble-15.mp3")[:1000*interval]
-    rumble2 = AudioSegment.from_mp3(soundsfolder+"rumble-1.mp3")[:1000*interval]
-    rumble3 = AudioSegment.from_mp3(soundsfolder+"rumble-05.mp3")[:1000*interval]
+    geiger_click_low = AudioSegment.from_mp3(soundsfolder+"geiger-click-low-by-qubodup.mp3")[:1000*interval]
+    geiger_click_high = AudioSegment.from_mp3(soundsfolder+"geiger-click-sharp-by-imafoley.mp3")[:1000*interval]
+    silence = AudioSegment.from_mp3(soundsfolder+"silence.mp3")[:1000*interval]
+    
+    default_click = geiger_click_high
+    if not use_high_click:
+        default_click = geiger_click_low
+    #rumble0 = AudioSegment.from_mp3(soundsfolder+"rumble-2.mp3")[:1000*interval]
+    #rumble1 = AudioSegment.from_mp3(soundsfolder+"rumble-15.mp3")[:1000*interval]
+    #rumble2 = AudioSegment.from_mp3(soundsfolder+"rumble-1.mp3")[:1000*interval]
+    #rumble3 = AudioSegment.from_mp3(soundsfolder+"rumble-05.mp3")[:1000*interval]
     sounds_dict = {
-        zero: rumble0,
-        one: rumble1,
-        two: rumble2,
-        three: rumble3
+        zero: silence+silence,
+        one: silence+default_click,
+        two: default_click+silence,
+        three: default_click+default_click
     }
     output = None
     for char in blackboxes:
@@ -132,6 +139,7 @@ def encode_audio(blackboxes: str, interval: float = 0.1):
         else:
             output += sounds_dict[char]
     play(output)
+    output.export("output.wav", format="wav")
 
 def main():
     """
@@ -144,7 +152,7 @@ def main():
     if choice == "encode":
         output = encoder(user_input)
         print(output)
-        encode_audio(output)
+        encode_audio(output, interval=0.05, use_high_click=True)
     elif choice == "decode":
         output = decoder(user_input)
         print(output)
